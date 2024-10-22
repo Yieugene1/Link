@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
-import { Link, Route } from 'react-router-dom';
 
-const Login = () => {
+const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-  
+    const [confirmPassword, setConfirmPassword] = useState('');
+
     const handleSubmit = (e) => {
-      e.preventDefault();
-      console.log('Email:', email);
-      console.log('Password:', password);
+        e.preventDefault();
+        if (password !== confirmPassword) {
+          alert('Passwords do not match!');
+          return;
+        }
+        console.log('Email:', email);
+        console.log('Password:', password);
     };
-  
+
     return (
-        <Container maxWidth="sm" >
+        <Container maxWidth="sm">
             <Box 
                 display="flex" 
                 flexDirection="column" 
@@ -22,10 +26,10 @@ const Login = () => {
                 bgcolor="#ffffff"
                 padding= "20px"
                 borderRadius="8px">
-                
-                <Typography variant="h4" component="h2" gutterBottom>Login</Typography>
 
-                <form onSubmit={handleSubmit} >
+                <Typography variant="h4" component="h2" gutterBottom>Register</Typography>
+
+                <form onSubmit={handleSubmit}>
                     <TextField
                         margin="normal"
                         fullWidth
@@ -43,22 +47,27 @@ const Login = () => {
                         variant="outlined"
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <Button
+                    <TextField
+                        margin="normal"
                         fullWidth
-                        type="submit"
+                        type="password"
+                        label="Password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <Button 
+                        fullWidth
+                        type="submit" 
                         variant="contained"
                         color="primary"
                         style={{ marginTop: '16px' }}
                     >
-                        Login
+                    Register
                     </Button>
-                </form>
-                <Typography>Don't have an acount? <Link to="/register">Register here</Link></Typography>
-            </Box>
-            
-        </Container>
-    );
-  };
-  
-  
-  export default Login;
+            </form>
+          </Box>
+        </Container >
+      );
+    };
+
+    export default Register;
