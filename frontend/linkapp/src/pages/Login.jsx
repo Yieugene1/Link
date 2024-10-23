@@ -1,15 +1,43 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
-import { Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
   
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
-      console.log('Email:', email);
-      console.log('Password:', password);
+      setError(''); // 重置错误消息
+      
+      // 创建POST请求
+      const response = await fetch('http://127.0.0.1:8000/api/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+        username: username,  // Django的默认用户名字段是`username`
+        password: password,
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        // 请求成功后可以存储token（JWT）
+        localStorage.setItem('access_token', data.access);
+        localStorage.setItem('refresh_token', data.refresh);
+        console.log('Logged in successfully:', data);
+        
+        // 跳转到受保护的页面或执行其他操作
+        window.location.href = '/dashboard'; // 假设你有一个仪表盘页面
+      } else {
+        // 处理登录失败情况
+        console.error('Login failed:', data);
+        setError('Invalid email or password');
+      }
     };
   
     return (
@@ -29,10 +57,10 @@ const Login = () => {
                     <TextField
                         margin="normal"
                         fullWidth
-                        type="email"
-                        label="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        type="text"
+                        label="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
                     <TextField
                         margin="normal"
@@ -43,6 +71,7 @@ const Login = () => {
                         variant="outlined"
                         onChange={(e) => setPassword(e.target.value)}
                     />
+                    {error && <Typography color="error">{error}</Typography>}
                     <Button
                         fullWidth
                         type="submit"
@@ -53,12 +82,11 @@ const Login = () => {
                         Login
                     </Button>
                 </form>
-                <Typography>Don't have an acount? <Link to="/register">Register here</Link></Typography>
+                <Typography>Don't have an account? <Link to="/register">Register here</Link></Typography>
             </Box>
             
         </Container>
     );
-  };
-  
-  
-  export default Login;
+};
+
+export default Login;
