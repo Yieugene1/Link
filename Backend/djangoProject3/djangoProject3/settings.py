@@ -93,15 +93,17 @@ WSGI_APPLICATION = 'djangoProject3.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Linkapp',     # 数据库名称
+        'USER': 'postgres',         # 数据库用户名
+        'PASSWORD': '123', # 数据库密码
+        'HOST': 'localhost',      # 数据库服务器地址，通常为 localhost
+        'PORT': '5432',           # PostgreSQL 默认端口
     }
 }
-
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -138,3 +140,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
