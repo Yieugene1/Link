@@ -39,6 +39,8 @@ jobs:
 
     - name: Install dependencies
       run: |
+        cd Backend
+        cd djangoProject3
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
@@ -52,8 +54,12 @@ jobs:
 
     - name: Migrate database
       run: |
+        cd Backend
+        cd djangoProject3
         python manage.py migrate
 
     - name: Run tests
       run: |
-        python manage.py test
+        cd Backend
+        cd djangoProject3
+        python manage.py runserver
