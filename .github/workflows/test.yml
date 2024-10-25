@@ -62,4 +62,4 @@ jobs:
       run: |
         cd Backend
         cd djangoProject3
-        python manage.py runserver
+        python manage.py check
