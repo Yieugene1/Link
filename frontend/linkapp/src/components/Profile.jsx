@@ -2,7 +2,7 @@ import React, { useState }from 'react';
 import { TextField, Button, Container, Typography, Box, Paper, Avatar, Tabs, Tab } from '@mui/material';
 import FriendList from './FriendList';
 import Settings from './Settings';
-import Posts from './Posts';
+import Posts from './Post';
 
 const Profile = () => {
     const [tabIndex, setTabIndex] = useState(0);
