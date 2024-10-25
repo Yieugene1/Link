@@ -19,6 +19,11 @@ jobs:
       with:
         python-version: '3.x'
 
+    - name: Install setuptools 
+      run: |
+        python -m ensurepip --upgrade
+        pip install --upgrade setuptools
+
     - name: Install dependencies
       run: |
         cd Backend  
