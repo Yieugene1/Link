@@ -23,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        email = attrs.get("email", "")
+        email = attrs.get("username", "")
         password = attrs.get("password", "")
 
         try:
@@ -34,7 +34,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         if not user.check_password(password):
             raise serializers.ValidationError("无效的邮箱或密码")
 
-        # 更新 username 到 attrs 中，以便 JWT 能生成 Token
         attrs["username"] = user.username
         return super().validate(attrs)
 
@@ -42,11 +41,11 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['user_id', 'username', 'bio', 'profileimg']
+        fields = [ 'user', 'bio', 'profileimg']
 
 
 class PostSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)  # 嵌套用户序列化
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Post

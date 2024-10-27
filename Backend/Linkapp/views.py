@@ -1,8 +1,9 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
-from .models import Profile
-from .serializers import UserSerializer, ProfileSerializer
+from .models import Profile, Post
+from .serializers import UserSerializer, ProfileSerializer, PostSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
@@ -14,6 +15,7 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = UserSerializer
+
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
@@ -57,16 +59,31 @@ class ProfileUpdateView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def patch(self, request, *args, **kwargs):
-        profile = self.get_object()
-        serializer = ProfileSerializer(profile, data=request.data, partial=True)  # 部分更新
 
+class PostAddView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        data = request.data.copy()
+        data['user'] = request.user
+
+        serializer = PostSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response({
-                'message': 'Profile updated successfully (PATCH)',
-                'data': serializer.data
-            }, status=status.HTTP_200_OK)
-
+            return Response(
+                {
+                    'message': 'Post submitted successfully',
+                    'data': serializer.data
+                },
+                status=status.HTTP_201_CREATED
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delect(self, request, Post_id):
+        user = request.user
+        post = get_object_or_404(Post, id=Post_id)
+        if post.user.username !=user.username:
+            return Response({'error':'You do not have permission to delete this post.'})
+        post.delete()
+        return Response({'message':'Post deleted successfully'})
 
