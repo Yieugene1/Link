@@ -1,8 +1,8 @@
-import { RouterProvider } from "react-router-dom";
-import { router } from "./router.jsx";
 import { ThemeProvider } from '@mui/material/styles';
 import { normalTheme, accessibleTheme } from './theme.js';
 import { useSelector } from 'react-redux'
+import { Outlet } from "react-router-dom";
+import Navbar from './components/Navbar.jsx';
 import './App.css';
 
 function App() {
@@ -10,7 +10,8 @@ function App() {
 
   return (
     <ThemeProvider theme={theme ? accessibleTheme : normalTheme}>
-      <RouterProvider router={router} />
+      <Navbar />
+      <Outlet />
     </ThemeProvider>
   )
 }
