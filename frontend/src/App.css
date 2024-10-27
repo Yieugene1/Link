@@ -20,7 +20,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #ffffff; 
+  background-color: #ffffff;
 }
 
 form {
@@ -39,22 +39,30 @@ input {
 
 .accButton {
   position: fixed !important;
-  top: 20px !important;
+  bottom: 20px !important;
   right: 20px !important;
-  z-index: 1000 !important; 
+  z-index: 1000 !important;
   padding: 12px;
   min-width: 50px;
-  border-radius: 50%; /* 圆形按钮 */
-  background: linear-gradient(45deg, #0055ff, #00ccff); /* 渐变背景 */
+  border-radius: 50%;
+  /* 圆形按钮 */
+  background: linear-gradient(45deg, #0055ff, #00ccff);
+  /* 渐变背景 */
   color: white;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 阴影效果 */
-  transition: background 0.3s ease; /* 背景过渡动画 */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  /* 阴影效果 */
+  transition: background 0.3s ease;
+  /* 背景过渡动画 */
 }
+
 .accButton:hover {
-  background: linear-gradient(45deg, #003bb3, #0099cc); /* 悬停时背景颜色 */
+  background: linear-gradient(45deg, #003bb3, #0099cc);
+  /* 悬停时背景颜色 */
 }
+
 .accButton:active {
-  transform: scale(0.95); /* 点击时缩小按钮 */
+  transform: scale(0.95);
+  /* 点击时缩小按钮 */
 }
 
 Paper {
@@ -76,6 +84,7 @@ nav {
   padding: 10px;
   background-Color: #333;
 }
+
 nav Link {
   color: white;
   margin: 0 15px;

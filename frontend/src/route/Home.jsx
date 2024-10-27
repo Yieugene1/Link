@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
 import { Grid } from '@mui/material';
-import Navbar from '../components/Navbar';
 import UserInfoCard from '../components/UserInfoCard';
 import MainContent from '../components/MainContent';
 import Messages from '../components/Messages';
