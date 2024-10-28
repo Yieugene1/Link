@@ -3,36 +3,42 @@ import AddIcon from "@mui/icons-material/Add";
 import { Fab } from "@mui/material";
 import { Zoom } from "@mui/material";
 
-function CreatePostArea(props){
+function CreatePostArea(props) {
     
     const [isExpanded, setExpanded] = useState(false);
     const [post, setPost] = useState({
         title: "",
-        content: "",
+        content: ""
     });
 
-    function handleChange(event){
+    function handleChange(event) {
         const { name, value } = event.target;
-        setPost((prevPost) => {
-            return {
-                ...prevPost,
-                [name]: value,
-            };
-        });
+        setPost((prevPost) => ({
+            ...prevPost,
+            [name]: value
+        }));
     }
 
-    function submitPost(event){
-        props.onAdd(post);
+    function submitPost(event) {
+        event.preventDefault(); 
+        const newPost = {
+            ...post,
+            timestamp: new Date().toLocaleString(), // 当前时间
+            avatar: "https://via.placeholder.com/30", // 默认头像
+            likes: 0, // 初始点赞数
+            commentsCount: 0 // 初始评论数
+        };
+
+        props.onAdd(newPost);
         setPost({
             title: "",
-            content: "",
+            content: ""
         });
-        event.preventDefault();
     }
 
     function expand() {
         setExpanded(true);
-      }
+    }
 
     return (
         <div>
@@ -53,16 +59,17 @@ function CreatePostArea(props){
                     onChange={handleChange}
                     value={post.content}
                     placeholder="Say something"
+                    style={styles.textarea}
                 />
 
-                <Zoom in={isExpanded} style={{ backgroundColor: "#f5ba13", color: "#fff", }}>
-                    <Fab onClick = {submitPost}>
+                <Zoom in={isExpanded}>
+                    <Fab onClick={submitPost} style={styles.fabButton}>
                         <AddIcon />
                     </Fab>
                 </Zoom>
             </form>
         </div>
-    )
+    );
 }
 
 const styles = {
@@ -84,21 +91,23 @@ const styles = {
       fontFamily: "inherit",
       resize: "none"
     },
-    button: {
+    textarea: {
+      width: "100%",
+      border: "none",
+      padding: "4px",
+      outline: "none",
+      fontSize: "1.2em",
+      fontFamily: "inherit",
+      resize: "none",
+      marginTop: "8px"
+    },
+    fabButton: {
+      backgroundColor: "#f5ba13",
+      color: "#fff",
       position: "absolute",
       right: "18px",
-      bottom: "-18px",
-
-
-      border: "none",
-      borderRadius: "50%",
-      width: "36px",
-      height: "36px",
-      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.3)",
-      cursor: "pointer",
-      outline: "none"
+      bottom: "-18px"
     }
 };
-
 
 export default CreatePostArea;

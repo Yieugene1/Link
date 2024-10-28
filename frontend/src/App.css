@@ -9,7 +9,6 @@
 #root {
   margin: 0 auto;
   width: 100%;
-  text-align: center;
 }
 
 .container {
@@ -63,19 +62,6 @@ input {
 .accButton:active {
   transform: scale(0.95);
   /* 点击时缩小按钮 */
-}
-
-Paper {
-  padding: 30px;
-  text-Align: center;
-  max-Width: 400px;
-  width: 100%;
-}
-
-Avatar {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto 20px auto;
 }
 
 nav {

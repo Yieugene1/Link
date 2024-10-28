@@ -1,4 +1,5 @@
-import { env } from "node:process";
+
+import.meta.env
 
 export const login = (email, password) =>
   fetch(`${env['BACKEND']}/api/login/`, {
