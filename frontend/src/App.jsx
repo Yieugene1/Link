@@ -12,7 +12,9 @@ function App() {
   return (
     <ThemeProvider theme={theme ? accessibleTheme : normalTheme}>
       <Navbar />
-      <Outlet />
+      <div className="main-content">
+        <Outlet />
+      </div>
       <AccessibleButton />
     </ThemeProvider>
   )

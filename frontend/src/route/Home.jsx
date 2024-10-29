@@ -4,7 +4,8 @@ import { TextField, Button, Container, Typography, Box } from '@mui/material';
 import { Grid } from '@mui/material';
 import UserInfoCard from '../components/UserInfoCard';
 import MainContent from '../components/MainContent';
-import Messages from '../components/Messages';
+
+import ContactCard from '../components/ContactCard';
 
 function Home() {
   return (
@@ -17,15 +18,10 @@ function Home() {
         <Grid item xs={12} md={6}>
           <MainContent />
         </Grid>
-        <Grid item xs={12} md={3}>
-          <Messages />
-        </Grid>
+        <div>
+          <ContactCard />
+        </div>
       </Grid>
-      <Container maxWidth="sm">
-        <h1>Home Page</h1>
-        <Link to="/welcome">Go to welcome</Link>
-        <p>Welcome to the home page of our social media app!</p>
-      </Container>
     </Box>
   );
 }
