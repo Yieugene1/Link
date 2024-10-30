@@ -50,11 +50,24 @@ jobs:
         echo "DB_PORT=5432" >> $GITHUB_ENV
 
     - name: Migrate database
+      env:
+        BD_NAME: ${{env.DB_NAME}}
+        DB_USER: ${{ env.DB_USER }}
+        DB_PASSWORD: ${{ env.DB_PASSWORD }}
+        DB_HOST: ${{ env.DB_HOST }}
+        DB_PORT: ${{ env.DB_PORT }}
       run: |
+
         cd Backend
         python manage.py migrate
 
     - name: Run tests
+      env:
+        BD_NAME: ${{env.DB_NAME}}
+        DB_USER: ${{ env.DB_USER }}
+        DB_PASSWORD: ${{ env.DB_PASSWORD }}
+        DB_HOST: ${{ env.DB_HOST }}
+        DB_PORT: ${{ env.DB_PORT }}
       run: |
         cd Backend
         python manage.py check

@@ -23,8 +23,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, validated_data):
-        email = validated_data.get("username", "")
-        password = validated_data.get("password", "")
+        email = validated_data.get("username")
+        password = validated_data.get("password")
 
         try:
             user = User.objects.get(email=email)
@@ -35,7 +35,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             raise serializers.ValidationError("密码错误")
 
         validated_data["username"] = user.username
-        return super().validate(validated_data)
+        data=super().validate(validated_data)
+        return data
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -52,16 +53,35 @@ class ProfileSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("User with this username does not exist.")
         return user
 
+    def create(self, validated_data):
+        # 从 validated_data 中获取已验证的 User 实例
+        validated_data['user'] = validated_data.pop('user')
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+
+        return super().update(instance, validated_data)
 
 
 class PostSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    img =serializers.ImageField(required=False,allow_null=True)
+    post_image = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Post
-        fields = ['post_id', 'user', 'image', 'caption', 'created_at', 'numOfLike']  
+        fields = ['post_id', 'user', 'post_image', 'title', 'content', 'timestamp', 'likes']
+        read_only_fields = ['post_id', 'user', 'timestamp', 'likes']  
 
+
+    def create(self, validated_data):
+        
+        return Post.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.post_image = validated_data.get('post_image', instance.post_image)
+        instance.title = validated_data.get('title', instance.title)
+        instance.content = validated_data.get('content', instance.content)
+        instance.save()
+        return instance
 
 class LikePostSerializer(serializers.ModelSerializer):
     post = PostSerializer(read_only=True)

@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from django.http import JsonResponse
 
 
 class RegisterView(generics.CreateAPIView):
@@ -37,6 +38,34 @@ class ProfileListView(generics.ListAPIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+    def post(self,request,*args,**kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data =serializer.validated_data
+        access_token=data['access']
+        refresh_token=data['access']
+        response = JsonResponse({
+            "message": "Login successful",
+            "access":data['access'],
+        })
+
+        response.set_cookie(
+            key="access",
+            value=access_token,
+            httponly=True,        
+            secure=True,          
+            samesite='Strict'      
+        )
+        response.set_cookie(
+            key="refresh",
+            value=refresh_token,
+            httponly=True,
+            secure=True,
+            samesite='Strict'
+        )
+
+        return response
+
 
 
 class ProfileUpdateView(APIView):
@@ -60,18 +89,21 @@ class ProfileUpdateView(APIView):
                 }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class Postlist(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes=[IsAuthenticated]
+    def get_queryset(self):
+        return Post.objects.filter(user=int(self.request.user.id))
+    
+
 
 class PostView(APIView):
     permission_classes = [IsAuthenticated]
-
+    
     def post(self, request, *args, **kwargs):
-        data = request.data.copy()
-        data['user'] = request.user.username
-        if self.request.user.username != self.request.data.get('user'):
-            return Response({'errors':"You do not have permission to update this profile."},status=status.HTTP_403_FORBIDDEN)
-        serializer = PostSerializer(data=data)
+        serializer = PostSerializer(data=request.data) 
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=self.request.user)  
             return Response(
                 {
                     'message': 'Post submitted successfully',
@@ -81,11 +113,31 @@ class PostView(APIView):
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # def delect(self, request, Post_id):
-    #     user = request.user
-    #     post = get_object_or_404(Post, id=Post_id)
-    #     if post.user.username !=user.username:
-    #         return Response({'error':'You do not have permission to delete this post.'})
-    #     post.delete()
-    #     return Response({'message':'Post deleted successfully'})
+    def put(self, request, post_id, *args, **kwargs):
+        
+        post = get_object_or_404(Post, post_id=post_id)
 
+        if post.user != request.user:
+            return Response({'error': 'You do not have permission to update this post.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        serializer = PostSerializer(post, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {
+                    'message': 'Post updated successfully',
+                    'data': serializer.data
+                },
+                status=status.HTTP_200_OK
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, post_id, *args, **kwargs):
+
+        post = get_object_or_404(Post, post_id=post_id)
+
+        if post.user != request.user:
+            return Response({'error': 'You do not have permission to delete this post.'}, status=status.HTTP_403_FORBIDDEN)
+        
+        post.delete()
+        return Response({'message': 'Post deleted successfully'}, status=status.HTTP_204_NO_CONTENT)

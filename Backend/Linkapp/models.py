@@ -16,13 +16,14 @@ class Profile(models.Model):
 class Post(models.Model):
     post_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='post_image',blank=True, null=True)
-    caption = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    numOfLike = models.IntegerField(default=0)
+    post_image = models.ImageField(upload_to='post_image',blank=True, null=True)
+    title = models.TextField(default="Untitled Post")
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    likes = models.IntegerField(default=0)
 
     def __str__(self):
-        return f'{self.user.username} - {self.caption[:20]}'
+        return f'{self.user.username} - {self.title[:20]}'
 
 
 class LikePost(models.Model):
