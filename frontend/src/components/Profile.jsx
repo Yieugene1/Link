@@ -45,6 +45,15 @@ const Profile = () => {
                 {tabIndex === 1 && <Posts />}
                 {tabIndex === 2 && <Settings />}
             </Box>
+            <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg">
+                <div className="avatar">
+                    <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                        <img src={profileData.image} alt="User Avatar" />
+                    </div>
+                </div>
+                <h1 className="mt-4 text-2xl font-semibold text-gray-800">{user.username}</h1>
+                <p className="mt-2 text-gray-600 text-center">{user.bio}</p>
+            </div>
         </Box>
     );
 }

@@ -12,7 +12,6 @@ const MainContent = () => {
       timestamp: new Date().toLocaleString(),
       avatar: newPost.avatar || "https://via.placeholder.com/30", 
       likes: 10,
-      commentsCount: 0
     };
     setPosts(prevPosts => [...prevPosts, postWithExtras])
   }
@@ -22,23 +21,25 @@ const MainContent = () => {
   }
 
   return (
-    <div style={{ padding:'20px', textAlign: 'center' }}>
-      <h2>Main Content Area</h2>
+    <div className="p-4">
+      <h2 className="text-2xl font-semibold mb-4">Main Content Area</h2>
       <p>This is the main content area. You can add more features here later.</p>
       <CreatePostArea onAdd={addPost} />
-      {posts.map((postItem, index) => (
-        <Posts
-          key={index}
-          id={index}
-          title={postItem.title}
-          content={postItem.content}
-          timestamp={postItem.timestamp}
-          avatar={postItem.avatar}
-          likes={postItem.likes}
-          commentsCount={postItem.commentsCount}
-          onDelete={deletePost}
-        />
-      ))}
+      <div>
+        {posts.map((postItem, index) => (
+          <Posts
+            key={index}
+            post_id={index}
+            title={postItem.title}
+            content={postItem.content}
+            post_image={postItem.image}
+            timestamp={postItem.timestamp}
+            avatar={postItem.avatar}
+            likes={postItem.likes}
+            onDelete={deletePost}
+          />
+        ))}
+      </div>
     </div>
   );
 };

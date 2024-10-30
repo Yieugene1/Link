@@ -9,20 +9,19 @@ import ContactCard from '../components/ContactCard';
 
 function Home() {
   return (
-    <Box>
-
-      <Grid container>
-        <Grid item xs={12} md={3}>
+    <div >
+      <div className='flex space-x-4'>
+        <div className='flex-1'>
           <UserInfoCard />
-        </Grid>
-        <Grid item xs={12} md={6}>
+        </div>
+        <div className='flex-1'>
           <MainContent />
-        </Grid>
-        <div>
+        </div>
+        <div className='flex-1'>
           <ContactCard />
         </div>
-      </Grid>
-    </Box>
+      </div>
+    </div>
   );
 }
 
