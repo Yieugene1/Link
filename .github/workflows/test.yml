@@ -1,10 +1,10 @@
-# .github/workflows/test.yml
 name: Django CI
 
 on:
   push:
     branches:
       - main
+      - '*'   
 
 jobs:
   test:
@@ -17,6 +17,7 @@ jobs:
           POSTGRES_DB: Linkapp
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: 123
+          POSTGRES_HOST_AUTH_METHOD: trust
         ports:
           - 5432:5432
         options: >-
@@ -40,25 +41,20 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Set environment variables for database
+      run: |
+        echo "DB_NAME=Linkapp" >> $GITHUB_ENV
+        echo "DB_USER=postgres" >> $GITHUB_ENV
+        echo "DB_PASSWORD=123" >> $GITHUB_ENV
+        echo "DB_HOST=postgres" >> $GITHUB_ENV  
+        echo "DB_PORT=5432" >> $GITHUB_ENV
 
     - name: Migrate database
-      env:
-        DB_NAME=Linkapp
-        DB_USER=postgres
-        DB_PASSWORD=123
-        DB_HOST=postgres
-        DB_PORT=5432 
       run: |
         cd Backend
         python manage.py migrate
 
-    - name: Run test
-      env:
-        DB_NAME=Linkapp
-        DB_USER=postgres
-        DB_PASSWORD=123
-        DB_HOST=postgres
-        DB_PORT=5432 
+    - name: Run tests
       run: |
         cd Backend
         python manage.py check

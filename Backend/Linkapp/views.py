@@ -47,26 +47,28 @@ class ProfileUpdateView(APIView):
         return profile
 
     def put(self, request, *args, **kwargs):
+        
+        if self.request.user.username != self.request.data.get('user'):
+            return Response({'errors':"You do not have permission to update this profile."},status=status.HTTP_403_FORBIDDEN)
         profile = self.get_object()
         serializer = ProfileSerializer(profile, data=request.data)
-
         if serializer.is_valid():
-            serializer.save()
-            return Response({
-                'message': 'Profile updated successfully',
-                'data': serializer.data
-            }, status=status.HTTP_200_OK)
-
+                serializer.save()
+                return Response({
+                    'message': 'Profile updated successfully',
+                    'data': serializer.data
+                }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class PostAddView(APIView):
+class PostView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         data = request.data.copy()
-        data['user'] = request.user
-
+        data['user'] = request.user.username
+        if self.request.user.username != self.request.data.get('user'):
+            return Response({'errors':"You do not have permission to update this profile."},status=status.HTTP_403_FORBIDDEN)
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -79,11 +81,11 @@ class PostAddView(APIView):
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delect(self, request, Post_id):
-        user = request.user
-        post = get_object_or_404(Post, id=Post_id)
-        if post.user.username !=user.username:
-            return Response({'error':'You do not have permission to delete this post.'})
-        post.delete()
-        return Response({'message':'Post deleted successfully'})
+    # def delect(self, request, Post_id):
+    #     user = request.user
+    #     post = get_object_or_404(Post, id=Post_id)
+    #     if post.user.username !=user.username:
+    #         return Response({'error':'You do not have permission to delete this post.'})
+    #     post.delete()
+    #     return Response({'message':'Post deleted successfully'})
 
