@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
-import { register } from '../lib/fetch';
 
-const Register = ({ handleClick }) => {
+const Register = () => {
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -22,14 +21,25 @@ const Register = ({ handleClick }) => {
 
         // 创建POST请求
         try {
-            const response = await register(name, email, password)
+            const response = await fetch('http://127.0.0.1:8000/api/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: name,
+                    email: email,
+                    password: password,
+                }),
+            });
 
             // 处理响应
             if (response.ok) {
                 setSuccessMessage("Registration successful!");
                 // 你可以在这里处理成功后的逻辑，例如跳转到登录页面
             } else {
-                setError(response.error || "Registration failed");
+                const data = await response.json();
+                setError(data.error || "Registration failed");
             }
         } catch (error) {
             setError("An error occurred. Please try again.");
@@ -96,7 +106,6 @@ const Register = ({ handleClick }) => {
                         Register
                     </Button>
                 </form>
-                <Typography>Already have an account? <a onClick={handleClick}>Login here</a></Typography>
             </Box>
         </Container >
     );

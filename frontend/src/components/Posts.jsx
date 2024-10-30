@@ -1,54 +1,40 @@
 import React from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
-function Posts(props){
-    function handleClick(){
-        props.onDelete(props.id);
-    }
+function Posts(props) {
+  function handleClick() {
+    props.onDelete(props.post_id);
+  }
 
-    return (
-        <div style={styles.post}>
-            <h1>{props.title}</h1>
-            <p>{props.content}</p>
-            <button onClick={handleClick}>
-                <DeleteIcon style={{ color: "#f5ba13" }}/>
-            </button>
+  function handleLike() {
+    props.onLike(props.post_id);
+  }
+
+  return (
+    <div className="card w-full bg-base-100 shadow-md mb-4">
+      <div className="card-body">
+        <div className="flex items-center mb-2">
+          <img src={props.avatar} alt="User Avatar" className="w-8 h-8 rounded-full mr-2" />
+          <p className="text-sm text-gray-500">{props.timestamp}</p>
         </div>
-    )
+        <h2 className="card-title text-lg font-bold">{props.title}</h2>
+        <p>{props.content}</p>
+        {props.post_image && (
+          <img src={props.post_image} alt="Post" className="w-full h-auto rounded mt-2" />
+        )}
+        <div className="flex justify-between items-center mt-4">
+          <button onClick={handleLike} >
+            <ThumbUpIcon style={{ color: "#f5ba13" }}/> {props.likes}
+          </button>
+          <button onClick={handleClick}>
+            <DeleteIcon style={{ color: "#f5ba13" }}/>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-const styles = {
-    post: {
-      background: "#fff",
-      borderRadius: "7px",
-      boxShadow: "0 2px 5px #ccc",
-      padding: "10px",
-      width: "240px",
-      margin: "16px",
-      float: "left"
-    },
-    h1: {
-      fontSize: "1.1em",
-      marginBottom: "6px"
-    },
-    p: {
-      fontSize: "1.1em",
-      marginBottom: "10px",
-      whiteSpace: "pre-wrap",
-      wordWrap: "break-word"
-    },
-    button: {
-      position: "relative",
-      float: "right",
-      marginRight: "10px",
-      color: "#f5ba13",
-      border: "none",
-      width: "36px",
-      height: "36px",
-      cursor: "pointer",
-      outline: "none",
-      backgroundColor: "transparent"
-    }
-  };
 
 export default Posts;
