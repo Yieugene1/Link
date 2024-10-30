@@ -46,7 +46,7 @@ jobs:
         echo "DB_NAME=Linkapp" >> $GITHUB_ENV
         echo "DB_USER=postgres" >> $GITHUB_ENV
         echo "DB_PASSWORD=123" >> $GITHUB_ENV
-        echo "DB_HOST=postgres" >> $GITHUB_ENV  
+        echo "DB_HOST=localhost" >> $GITHUB_ENV  
         echo "DB_PORT=5432" >> $GITHUB_ENV
 
     - name: Migrate database
