@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
+import { useDispatch } from 'react-redux'
+import { signIn } from '../store/userSlice.js'
+import { register } from '../lib/fetch'
 
 const Register = () => {
     const [email, setEmail] = useState('');
@@ -8,38 +11,24 @@ const Register = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const dispatch = useDispatch()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(''); // 重置错误消息
-
-        // 密码确认检查
+        setError('');
         if (password !== confirmPassword) {
             setError("Passwords do not match");
             return;
         }
-
-        // 创建POST请求
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/register/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: name,
-                    email: email,
-                    password: password,
-                }),
-            });
-
-            // 处理响应
+            const response = await register(name, email, password);
             if (response.ok) {
                 setSuccessMessage("Registration successful!");
-                // 你可以在这里处理成功后的逻辑，例如跳转到登录页面
+                dispatch(signIn())
+                redirect('/');
             } else {
                 const data = await response.json();
-                setError(data.error || "Registration failed");
+                setError(data.non_field_errors[0]);
             }
         } catch (error) {
             setError("An error occurred. Please try again.");

@@ -9,7 +9,7 @@ export const login = (email, password) =>
       email: email,
       password: password,
     }),
-  }).then((response) => response.json());
+  })
 
 export const register = (name, email, password) =>
   fetch(`${env['BACKEND']}/api/register/`, {
@@ -20,4 +20,4 @@ export const register = (name, email, password) =>
       email: email,
       password: password,
     }),
-  }).then((response) => response.json());
+  })
