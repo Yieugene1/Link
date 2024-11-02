@@ -8,11 +8,13 @@ import './App.css';
 
 function App() {
   const theme = useSelector((state) => state.theme.value)
-
+  //const user = useSelector((state) => state.user.value)
+  let user = true
+  
   return (
     <ThemeProvider theme={theme ? accessibleTheme : normalTheme}>
-      <Navbar />
-      <div className="main-content">
+      {user? <Navbar /> : null}
+      <div>
         <Outlet />
       </div>
       <AccessibleButton />

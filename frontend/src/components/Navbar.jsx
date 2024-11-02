@@ -1,36 +1,31 @@
 import React from 'react';
-import { AppBar, Toolbar, Tabs, Button, Box, Tab } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 
 const Navbar = () => {
   return (
-    <AppBar position="fixed" color="primary" elevation={4}>
-      <Toolbar>
-        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-start'}}>
-          <Tabs value={false} indicatorColor="secondary" textColor="inherit" >
-            <Tab label="Home" component={Link} to="/" sx={tabStyle} />
-            <Tab label="Friends" component={Link} to="/friends" sx={tabStyle} />
-            <Tab label="Profile" component={Link} to="/profile" sx={tabStyle} />
-          </Tabs>
-        </Box>
-        <Button color="inherit" component={Link} to="/welcome" sx={buttonStyle}>
-          Log In/ Sign In
-        </Button>
-      </Toolbar>
-    </AppBar>
+    <div className="navbar bg-primary text-white sticky top-0 w-full shadow-lg z-50">
+      <div className="flex-1">
+        <div className="tabs">
+          <Link to="/" className="tab tab-bordered font-bold text-lg mx-2">
+            Home
+          </Link>
+          <Link to="/friends" className="tab tab-bordered font-bold text-lg mx-2">
+            Friends
+          </Link>
+          <Link to="/profile" className="tab tab-bordered font-bold text-lg mx-2">
+            Profile
+          </Link>
+        </div>
+        <div className="flex-none">
+          <Link to="/welcome" className="btn btn-ghost font-bold">
+            Log In / Sign In
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 };
 
-const tabStyle = {
-  fontWeight: 'bold',
-  fontSize: '1rem',
-  textTransform: 'none',
-  margin: '0 10px'
-};
-const buttonStyle = {
-  fontWeight: 'bold',
-  textTransform: 'none'
-};
 
 export default Navbar;

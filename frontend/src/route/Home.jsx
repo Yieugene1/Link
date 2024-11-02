@@ -1,13 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import { TextField, Button, Container, Typography, Box } from '@mui/material';
-import { Grid } from '@mui/material';
 import UserInfoCard from '../components/UserInfoCard';
 import MainContent from '../components/MainContent';
-
 import ContactCard from '../components/ContactCard';
+import Navbar from '../components/Navbar.jsx';
 
 function Home() {
+
   return (
     <div >
       <div className='flex space-x-4'>

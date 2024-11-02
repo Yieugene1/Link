@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography, Box } from '@mui/material';
-import { Link, redirect } from 'react-router-dom';
+import { TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux'
 import { signIn } from '../store/userSlice.js'
@@ -33,17 +32,10 @@ const Login = ({ handleClick }) => {
   };
 
   return (
-    <Container maxWidth="sm" >
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        bgcolor="#ffffff"
-        padding="20px"
-        borderRadius="8px">
+    <div className="flex justify-center items-center ">
+      <div className="flex flex-col items-center bg-white p-8 rounded-lg shadow-lg w-[400px] h-[600px] overflow-y-auto opacity-80">
 
-        <Typography variant="h4" component="h2" gutterBottom>Login</Typography>
+        <h2 className="text-2xl font-bold mb-4 text-black">Login</h2>
 
         <form onSubmit={handleSubmit} >
           <TextField
@@ -58,32 +50,30 @@ const Login = ({ handleClick }) => {
             margin="normal"
             fullWidth
             type="password"
-            label="Password"
+            label="password"
             value={password}
             variant="outlined"
             onChange={(e) => setPassword(e.target.value)}
           />
-          {error && <Typography color="error">{error}</Typography>}
-          {success && <Typography style={{ color: 'green' }}>{success}</Typography>}
-          <Button
-            fullWidth
+          {error && <p className='text-red-500 mb-4'>{error}</p>}
+          {success && <p className='text-green-500 mb-4'>{success}</p>}
+          <button
             type="submit"
-            variant="contained"
+            className="btn w-full mt-4 text-white btn-primary"
             color="primary"
-            style={{ marginTop: '16px' }}
           >
             Login
-          </Button>
+          </button>
         </form>
-        <Typography>
-        Don't have an account?{' '}
-        <span onClick={handleClick} style={{ color: 'blue', cursor: 'pointer' }}>
-          Register here
-        </span>
-      </Typography>
-      </Box>
+        <p className="mt-4 text-black ">
+          Don't have an account?{' '}
+          <span onClick={handleClick} className="text-blue-500 cursor-pointer">
+            Register here
+          </span>
+        </p>
+      </div>
 
-    </Container>
+    </div>
   );
 };
 

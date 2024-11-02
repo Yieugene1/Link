@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography, Box } from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux'
 import { signIn } from '../store/userSlice.js'
 import { register } from '../lib/fetch'
 
-const Register = () => {
+const Register = ({ handleClick }) => {
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -36,17 +36,10 @@ const Register = () => {
     };
 
     return (
-        <Container maxWidth="sm">
-            <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-                alignItems="center"
-                bgcolor="#ffffff"
-                padding="20px"
-                borderRadius="8px">
+        <div className="flex justify-center items-center">
+            <div className="flex flex-col items-center bg-white p-8 rounded-lg shadow-lg w-[400px] h-[600px] overflow-y-auto opacity-80">
 
-                <Typography variant="h4" component="h2" gutterBottom>Register</Typography>
+                <p className="text-2xl font-bold mb-4 text-black">Register</p>
 
                 {error && <Typography color="error">{error}</Typography>}
                 {successMessage && <Typography color="primary">{successMessage}</Typography>}
@@ -56,7 +49,7 @@ const Register = () => {
                         margin="normal"
                         fullWidth
                         type="text"
-                        label="Name"
+                        label="username"
                         value={name} // 修正为小写的 name
                         onChange={(e) => setName(e.target.value)}
                     />
@@ -64,7 +57,7 @@ const Register = () => {
                         margin="normal"
                         fullWidth
                         type="email"
-                        label="Email"
+                        label="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -72,7 +65,7 @@ const Register = () => {
                         margin="normal"
                         fullWidth
                         type="password"
-                        label="Password"
+                        label="password"
                         value={password}
                         variant="outlined"
                         
@@ -82,22 +75,25 @@ const Register = () => {
                         margin="normal"
                         fullWidth
                         type="password"
-                        label="Confirm Password"
+                        label="confirm password"
                         value={confirmPassword} // 确认密码输入框
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
-                    <Button
-                        fullWidth
+                    <button
                         type="submit"
-                        variant="contained"
-                        color="primary"
-                        style={{ marginTop: '16px' }}
+                        className="btn btn-primary text-white w-full mt-4"
                     >
                         Register
-                    </Button>
+                    </button>
                 </form>
-            </Box>
-        </Container >
+                <p className="mt-4 text-black">
+                    Already have an account?{' '}
+                    <span onClick={handleClick} className="text-blue-500 cursor-pointer">
+                        Login here
+                    </span>
+                </p>
+            </div>
+        </div >
     );
 };
 
