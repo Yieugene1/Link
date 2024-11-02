@@ -22,8 +22,6 @@ const MainContent = () => {
 
   return (
     <div className="p-4">
-      <h2 className="text-2xl font-semibold mb-4">Main Content Area</h2>
-      <p>This is the main content area. You can add more features here later.</p>
       <CreatePostArea onAdd={addPost} />
       <div>
         {posts.map((postItem, index) => (
