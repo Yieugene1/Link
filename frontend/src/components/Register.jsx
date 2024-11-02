@@ -20,19 +20,19 @@ const Register = () => {
             setError("Passwords do not match");
             return;
         }
-        try {
-            const response = await register(name, email, password);
-            if (response.ok) {
+        console.log({ name, email, password });
+
+        const response = await register(name, email, password);
+        if (response.ok) {
                 setSuccessMessage("Registration successful!");
                 dispatch(signIn())
-                redirect('/');
-            } else {
-                const data = await response.json();
-                setError(data.non_field_errors[0]);
-            }
-        } catch (error) {
-            setError("An error occurred. Please try again.");
+                redirect('/http://localhost:5173/');
         }
+        else {
+                const data = await response.json();
+                setError(data.non_field_errors);
+            }
+
     };
 
     return (
@@ -75,6 +75,7 @@ const Register = () => {
                         label="Password"
                         value={password}
                         variant="outlined"
+                        
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <TextField

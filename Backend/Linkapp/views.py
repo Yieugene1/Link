@@ -3,7 +3,7 @@ from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from .models import Profile, Post
-from .serializers import UserSerializer, ProfileSerializer, PostSerializer
+from .serializers import UserSerializer, ProfileSerializer, PostSerializer,LikePostSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
@@ -46,7 +46,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         refresh_token=data['access']
         response = JsonResponse({
             "message": "Login successful",
-            "access":data['access'],
         })
 
         response.set_cookie(
@@ -54,14 +53,14 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             value=access_token,
             httponly=True,        
             secure=True,          
-            samesite='Strict'      
+            samesite='None'      
         )
         response.set_cookie(
             key="refresh",
             value=refresh_token,
             httponly=True,
             secure=True,
-            samesite='Strict'
+            samesite='None'
         )
 
         return response
@@ -77,8 +76,6 @@ class ProfileUpdateView(APIView):
 
     def put(self, request, *args, **kwargs):
         
-        if self.request.user.username != self.request.data.get('user'):
-            return Response({'errors':"You do not have permission to update this profile."},status=status.HTTP_403_FORBIDDEN)
         profile = self.get_object()
         serializer = ProfileSerializer(profile, data=request.data)
         if serializer.is_valid():
@@ -141,3 +138,30 @@ class PostView(APIView):
         
         post.delete()
         return Response({'message': 'Post deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    
+class LikePostView(APIView):
+    permission_classes=[IsAuthenticated]
+    def post(self,request,post_id,*org,**kwargs):
+        request.data['user'] = request.user.id
+        request.data['post'] = post_id
+        serializer =LikePostSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {
+                    "message":"Like this Post",
+                    'data':serializer.data
+                },status=status.HTTP_200_OK
+            )
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self,request):
+        response =Response(
+            {"message":"logout successfully"},
+            status=status.HTTP_200_OK
+                   )
+        response.delete_cookie('access')
+        response.delete_cookie('refresh')
+        return response

@@ -41,26 +41,16 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     profileimg = serializers.ImageField(required=False,allow_null=True)
-    user = serializers.CharField()
     class Meta:
         model = Profile
-        fields = [ 'user', 'bio', 'profileimg']
+        fields = [ 'bio', 'profileimg']
     def validate_user(self, value):
-        # 尝试通过 username 查找 User 实例
         try:
             user = User.objects.get(username=value)
         except User.DoesNotExist:
             raise serializers.ValidationError("User with this username does not exist.")
         return user
 
-    def create(self, validated_data):
-        # 从 validated_data 中获取已验证的 User 实例
-        validated_data['user'] = validated_data.pop('user')
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-
-        return super().update(instance, validated_data)
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -84,12 +74,10 @@ class PostSerializer(serializers.ModelSerializer):
         return instance
 
 class LikePostSerializer(serializers.ModelSerializer):
-    post = PostSerializer(read_only=True)
 
     class Meta:
         model = LikePost
-        fields = ['post', 'username']
-
+        fields = ['user', 'post'] 
 
 class FollowersCountSerializer(serializers.ModelSerializer):
     follower = UserSerializer(read_only=True)
