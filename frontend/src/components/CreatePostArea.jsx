@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CreatePost } from '../lib/fetch';
+import PostModal from './PostModal';
 
 function CreatePostArea({ onPostAdded }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -35,16 +36,9 @@ function CreatePostArea({ onPostAdded }) {
 
     const submitPost =async(e)=>{
         e.preventDefault();
-        const newPost = {
-            ...post,
-            timestamp: new Date().toLocaleString(),
-            avatar: "https://via.placeholder.com/30",
-            likes: 0,
-        };
 
-        const response = await CreatePost(newPost.title,newPost.content,newPost.image,newPost.avatar);
+        const response = await CreatePost(post.title, post.content, post.image);
         if (response.ok){
-            console.log("Post submitted successfully");
             onPostAdded(); 
             setPost({
                 title: "",
@@ -56,7 +50,7 @@ function CreatePostArea({ onPostAdded }) {
 
         } else {
             const data = await response.json();
-            console.log("error");
+            console.log("Error:", data);
         }
     };   
 
@@ -74,51 +68,15 @@ function CreatePostArea({ onPostAdded }) {
             />
 
             {/* 模态窗口 */}
-            {isOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white p-8 rounded-lg shadow-lg w-[600px] max-w-full relative">
-                        <button className="absolute top-2 right-2 text-gray-600" onClick={toggleModal}>
-                            &times;
-                        </button>
-                        <h3 className="text-xl font-bold mb-4">Create a Post</h3>
-                        <form onSubmit={submitPost} className="space-y-4 max-w-full" >
-                            <input
-                                name="title"
-                                onChange={handleChange}
-                                value={post.title}
-                                placeholder="Title"
-                                className="input input-bordered w-full"
-                            />
-                            <textarea
-                                name="content"
-                                onChange={handleChange}
-                                value={post.content}
-                                placeholder="Content"
-                                className="input input-bordered w-full h-48"
-                            />
-
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                                id="image-upload"
-                                className="hidden"
-                            />
-                            <label htmlFor="image-upload" className="btn btn-outline btn-primary flex items-center space-x-2 cursor-pointer">
-                                <span>上传图片</span>
-                            </label>
-                            {uploadStatus && <p className="text-sm text-gray-500">{uploadStatus}</p>}
-                            {post.image && (
-                                <div className="mt-4">
-                                    <img src={post.image} alt="Preview" className="w-32 h-32 object-cover rounded-md border" />
-                                </div>
-                            )}
-
-                            <button type="submit" className="btn btn-primary w-full">Submit Post</button>
-                        </form>
-                    </div>
-                </div>
-            )}
+            <PostModal
+                isOpen={isOpen}
+                toggleModal={toggleModal}
+                submitPost={submitPost}
+                post={post}
+                handleChange={handleChange}
+                handleImageUpload={handleImageUpload}
+                uploadStatus={uploadStatus}
+            />
         </div>
     );
 }

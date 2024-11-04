@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import CreatePostArea from './CreatePostArea';
 import Posts from './Posts';
 import { MyPost, DeletePost } from '../lib/fetch';
+import ModalCard from './ModalCard';
 
 const MainContent = () => {
   const [posts, setPosts] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState(null);
 
   const fetchPosts = async () => {
     const response = await MyPost();
@@ -24,36 +27,46 @@ const MainContent = () => {
     fetchPosts();
   };
 
-  const deletePost = async (post_id) => {
-    const response = await DeletePost(post_id);
-    console.log(posts.postItem.id)
-    if (response.ok) {
-      alert("data.message")
-      fetchPosts();
-    } else {
-      alert("data.error")
-    }
-  };
+  const handleDelete = (post_id) => {
+    setSelectedPostId(post_id);
+    setIsModalOpen(true);
+};
+
+const deletePost = async () => {
+  if (selectedPostId) {
+      const response = await DeletePost(selectedPostId);
+      if (response.ok) {
+          fetchPosts();
+      } else {
+          alert("Failed to delete post");
+      }
+      setIsModalOpen(false);
+      setSelectedPostId(null);
+  }
+};
 
   return (
-    <div className="p-4">
+    <div className=" w-full p-4">
       <CreatePostArea onPostAdded={handlePostAdded} />
       <div className="divider"></div>
       <div>
-        {posts.map((postItem, index) => (
+        {posts.map((postItem) => (
           <Posts
-            key={postItem.id}
-            post_id={postItem.id} // 假设每个postItem有一个id
+            key={postItem.post_id}
+            post_id={postItem.post_id}
             title={postItem.title}
             content={postItem.content}
-            post_image={postItem.image}
+            post_image={postItem.post_image}
             timestamp={postItem.timestamp}
             avatar={postItem.avatar}
             likes={postItem.likes}
-            onDelete={deletePost}
+            onDelete={() => handleDelete(postItem.post_id)}
           />
         ))}
       </div>
+      <ModalCard isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onConfirm={deletePost}>
+        Are you sure you want to delete this post?
+      </ModalCard>
     </div>
   );
 };

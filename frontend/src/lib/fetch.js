@@ -46,7 +46,7 @@ export const MyPost = () =>
   }).then((response) => response);
 
 export const DeletePost = (id) =>
-  fetch(`${import.meta.env.VITE_BACKEND}/api/PostView/${id}`, {
+  fetch(`${import.meta.env.VITE_BACKEND}/api/PostView/${id}/`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'

@@ -4,10 +4,10 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 function Posts(props) {
 
-
-  function handleLike() {
-    props.onLike(props.post_id);
+  function handleClick() {
+    props.onDelete(props.post_id); 
   }
+
 
   return (
     <div className="card w-full bg-base-100 shadow-md mb-4">
@@ -23,10 +23,10 @@ function Posts(props) {
         )}
 
         <div className="flex justify-between items-center mt-4">
-          <button onClick={() => props.onDelete(props.post_id)} >
+          <button >
             <ThumbUpIcon style={{ color: "#f5ba13" }}/> {props.likes}
           </button>
-          <button onClick={() => props.onDelete(props.post_id)}>
+          <button onClick={handleClick}>
             <DeleteIcon style={{ color: "#f5ba13" }}/>
           </button>
         </div>

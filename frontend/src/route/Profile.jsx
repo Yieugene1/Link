@@ -2,6 +2,7 @@ import React, { useState }from 'react';
 import MainContent from '../components/MainContent';
 import UserInfoCard from '../components/UserInfoCard';
 import FriendItem from '../components/FriendItem';
+import ContactCard from '../components/ContactCard';
 
 function Profile() {
     const user = {
@@ -88,15 +89,20 @@ function Profile() {
                     </button>
                 </div>
             </div>
+        </div>
 
         {/* 标签卡内容 */}
-        <div className="flex justify-center items-center p-4">
-          {activeTab === "posts" && <MainContent />}
+
+        <div className="flex justify-center items-center">
+          {activeTab === "posts" && <div className='w-1/2'> <MainContent /> </div>}
           {activeTab === "like post" && <UserInfoCard />}
           {activeTab === "setting" && <FriendItem />}
         </div>
-      </div>
-      </div>
+
+      <div className='w-1/4'>
+          <ContactCard />
+        </div>
+    </div>
     );
   }
 
