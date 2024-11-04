@@ -3,9 +3,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 
 function Posts(props) {
-  function handleClick() {
-    props.onDelete(props.post_id);
-  }
+
 
   function handleLike() {
     props.onLike(props.post_id);
@@ -23,11 +21,12 @@ function Posts(props) {
         {props.post_image && (
           <img src={props.post_image} alt="Post" className="w-full h-auto rounded mt-2" />
         )}
+
         <div className="flex justify-between items-center mt-4">
-          <button onClick={handleLike} >
+          <button onClick={() => props.onDelete(props.post_id)} >
             <ThumbUpIcon style={{ color: "#f5ba13" }}/> {props.likes}
           </button>
-          <button onClick={handleClick}>
+          <button onClick={() => props.onDelete(props.post_id)}>
             <DeleteIcon style={{ color: "#f5ba13" }}/>
           </button>
         </div>

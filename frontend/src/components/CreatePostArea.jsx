@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CreatePost } from '../lib/fetch';
 
-function CreatePostArea(props) {
+function CreatePostArea({ onPostAdded }) {
     const [isOpen, setIsOpen] = useState(false);
     const [uploadStatus, setUploadStatus] = useState("");
     const [post, setPost] = useState({
@@ -45,7 +45,8 @@ function CreatePostArea(props) {
         const response = await CreatePost(newPost.title,newPost.content,newPost.image,newPost.avatar);
         if (response.ok){
             console.log("Post submitted successfully");
-                setPost({
+            onPostAdded(); 
+            setPost({
                 title: "",
                 content: "",
                 image: null,

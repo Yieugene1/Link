@@ -44,3 +44,12 @@ export const MyPost = () =>
     },
     credentials: 'include', 
   }).then((response) => response);
+
+export const DeletePost = (id) =>
+  fetch(`${import.meta.env.VITE_BACKEND}/api/PostView/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include', 
+  }).then((response) => response);
