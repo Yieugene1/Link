@@ -8,7 +8,7 @@ import ChatWindow from './ChatWindow';
 const ContactCard = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
-  const [showChatWindow, setShowChatWindow] = useState(false); // 控制聊天窗口的显示
+  //const [showChatWindow, setShowChatWindow] = useState(false); // 控制聊天窗口的显示
 
   const toggleCard = () => {
     setIsExpanded(!isExpanded);
@@ -16,17 +16,18 @@ const ContactCard = () => {
 
   const selectFriend = (friend) => {
     setSelectedFriend(friend);
-    setShowChatWindow(true); // 显示聊天窗口
+    //setShowChatWindow(true); // 显示聊天窗口
   };
 
   const closeChatWindow = () => {
-    setShowChatWindow(false); // 关闭聊天窗口
+    setSelectedFriend(null); // 关闭聊天窗口
   };
 
   return (
     <div className={`fixed bottom-4 right-4 w-80 bg-white shadow-lg rounded-t-lg overflow-hidden transition-all duration-300 ${
       isExpanded ? 'h-[80vh] animate-slide-up' : 'h-12'
     }`}>
+
       <ContactHeader onToggle={toggleCard} isExpanded={isExpanded}/>
       {isExpanded && (
         <div className="p-4 space-y-4">
@@ -34,7 +35,11 @@ const ContactCard = () => {
           <ContactList onSelectFriend={selectFriend} />
         </div>
       )}
-      {showChatWindow && <ChatWindow friend={selectedFriend} onClose={closeChatWindow} />}
+      {selectedFriend && (
+        <div className="fixed bottom-4 right-[340px] w-[520px] h-[80vh] bg-white shadow-lg rounded-lg">
+          <ChatWindow friend={selectedFriend} onClose={closeChatWindow} />
+        </div>
+      )}
     </div>
   );
 };

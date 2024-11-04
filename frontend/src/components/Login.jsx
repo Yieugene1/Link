@@ -33,7 +33,7 @@ const Login = ({ handleClick }) => {
 
   return (
     <div className="flex justify-center items-center ">
-      <div className="flex flex-col items-center bg-white p-8 rounded-lg shadow-lg w-[400px] h-[600px] overflow-y-auto opacity-80">
+      <div className="flex flex-col items-center bg-white p-8 rounded-lg shadow-lg w-[400px] h-[400px] overflow-y-auto opacity-80">
 
         <h2 className="text-2xl font-bold mb-4 text-black">Login</h2>
 
