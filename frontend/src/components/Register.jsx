@@ -3,16 +3,16 @@ import { TextField, Typography } from '@mui/material';
 import { useDispatch } from 'react-redux'
 import { signIn } from '../store/userSlice.js'
 import { register } from '../lib/fetch'
-
+import { useNavigate } from 'react-router-dom';
 const Register = ({ handleClick }) => {
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
     const dispatch = useDispatch()
-
+    const navigate = useNavigate();
+    const [success, setSuccess] = useState(''); 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -24,13 +24,17 @@ const Register = ({ handleClick }) => {
 
         const response = await register(name, email, password);
         if (response.ok) {
-                setSuccessMessage("Registration successful!");
                 dispatch(signIn())
-                redirect('/http://localhost:5173/');
+                setSuccess('Signed up successfully!'); 
+                setTimeout(() => {
+                    handleClick();
+                  }, 1500);
+                
+                
         }
         else {
                 const data = await response.json();
-                setError(data.non_field_errors);
+                setError(data.username);
             }
 
     };
@@ -41,8 +45,6 @@ const Register = ({ handleClick }) => {
 
                 <p className="text-2xl font-bold mb-4 text-black">Register</p>
 
-                {error && <Typography color="error">{error}</Typography>}
-                {successMessage && <Typography color="primary">{successMessage}</Typography>}
 
                 <form onSubmit={handleSubmit}>
                     <TextField
@@ -79,6 +81,8 @@ const Register = ({ handleClick }) => {
                         value={confirmPassword} // 确认密码输入框
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
+                    {success && <p className='text-green-500 mb-4'>{success}</p>}
+                    {error && <p className='text-red-500 mb-4'>{error}</p>}
                     <button
                         type="submit"
                         className="btn btn-primary text-white w-full mt-4"

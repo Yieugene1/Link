@@ -23,7 +23,7 @@ const Login = ({ handleClick }) => {
       dispatch(signIn())
       setSuccess('Logged in successfully!'); 
       setTimeout(() => {
-        navigate('/home'); 
+        navigate('/'); 
       }, 1500);
     } else {
       const data = await response.json();

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import { CreatePost } from '../lib/fetch';
 
 function CreatePostArea(props) {
     const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +10,7 @@ function CreatePostArea(props) {
         content: "",
         image: null,
     });
-
+    
     function handleChange(event) {
         const { name, value } = event.target;
         setPost((prevPost) => ({
@@ -33,24 +34,52 @@ function CreatePostArea(props) {
         }
     }
 
-    function submitPost(event) {
-        event.preventDefault(); 
+    // function submitPost(event) {
+    //     event.preventDefault(); 
+    //     const newPost = {
+    //         ...post,
+    //         timestamp: new Date().toLocaleString(),
+    //         avatar: "https://via.placeholder.com/30",
+    //         likes: 0,
+    //     };
+
+    //     props.onAdd(newPost);
+    //     setPost({
+    //         title: "",
+    //         content: "",
+    //         image: null,
+    //     });
+    //     setUploadStatus("");
+    //     setIsOpen(false); // 关闭模态窗口
+    // }
+    const submitPost =async(e)=>{
+        e.preventDefault();
         const newPost = {
             ...post,
             timestamp: new Date().toLocaleString(),
             avatar: "https://via.placeholder.com/30",
             likes: 0,
         };
-
-        props.onAdd(newPost);
-        setPost({
-            title: "",
-            content: "",
-            image: null,
-        });
-        setUploadStatus("");
-        setIsOpen(false); // 关闭模态窗口
-    }
+        console.log(typeof newPost.title);
+        console.log(newPost.title,newPost.content,newPost.image,newPost.avatar);
+        const response = await CreatePost(newPost.title,newPost.content,newPost.image,newPost.avatar);
+        if (response.ok)
+        {
+            console.log("Post submitted successfully");
+                setPost({
+                title: "",
+                content: "",
+                image: null,
+            });
+            setUploadStatus("");
+            setIsOpen(false); // 关闭模态窗口
+        }
+        else {
+                const data = await response.json();
+                console.log("error");
+        }
+              
+        };   
 
     function toggleModal() {
         setIsOpen(!isOpen);
