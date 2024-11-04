@@ -20,9 +20,19 @@ class RegisterView(generics.CreateAPIView):
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
     permission_classes = [AllowAny]
-
+    def post(self,request,*args,**kwargs):
+        data = request.user
+        Serializer = UserSerializer(data= data)
+        if Serializer.is_valid():
+            Serializer.save()
+            return Response(
+                {
+                    "data":Serializer.data
+                },status=status.HTTP_200_OK
+            )
+        else:
+             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserListView(generics.ListAPIView):
     queryset = User.objects.all()

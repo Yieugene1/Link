@@ -55,10 +55,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     post_image = serializers.ImageField(required=False, allow_null=True)
-
+    avatar = serializers.ImageField(required=False, allow_null=True) 
     class Meta:
         model = Post
-        fields = ['post_id', 'user', 'post_image', 'title', 'content', 'timestamp', 'likes']
+        fields = ['post_id', 'user', 'post_image', 'title', 'content','avatar', 'timestamp', 'likes']
         read_only_fields = ['post_id', 'user', 'timestamp', 'likes']  
 
 
@@ -68,6 +68,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.post_image = validated_data.get('post_image', instance.post_image)
+        instance.avatar = validated_data.get('avatar', instance.avatar)
         instance.title = validated_data.get('title', instance.title)
         instance.content = validated_data.get('content', instance.content)
         instance.save()
