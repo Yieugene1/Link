@@ -42,7 +42,7 @@ const Login = ({ handleClick }) => {
             margin="normal"
             fullWidth
             type="text"
-            label="username"
+            label="email"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />

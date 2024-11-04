@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
 import { CreatePost } from '../lib/fetch';
 
 function CreatePostArea(props) {
@@ -10,6 +9,7 @@ function CreatePostArea(props) {
         content: "",
         image: null,
     });
+
     
     function handleChange(event) {
         const { name, value } = event.target;
@@ -29,29 +29,10 @@ function CreatePostArea(props) {
                 setPost((prevPost) => ({ ...prevPost, image: reader.result }));
                 setUploadStatus("上传成功！");
             };
-
             reader.readAsDataURL(file);
         }
     }
 
-    // function submitPost(event) {
-    //     event.preventDefault(); 
-    //     const newPost = {
-    //         ...post,
-    //         timestamp: new Date().toLocaleString(),
-    //         avatar: "https://via.placeholder.com/30",
-    //         likes: 0,
-    //     };
-
-    //     props.onAdd(newPost);
-    //     setPost({
-    //         title: "",
-    //         content: "",
-    //         image: null,
-    //     });
-    //     setUploadStatus("");
-    //     setIsOpen(false); // 关闭模态窗口
-    // }
     const submitPost =async(e)=>{
         e.preventDefault();
         const newPost = {
@@ -60,11 +41,9 @@ function CreatePostArea(props) {
             avatar: "https://via.placeholder.com/30",
             likes: 0,
         };
-        console.log(typeof newPost.title);
-        console.log(newPost.title,newPost.content,newPost.image,newPost.avatar);
+
         const response = await CreatePost(newPost.title,newPost.content,newPost.image,newPost.avatar);
-        if (response.ok)
-        {
+        if (response.ok){
             console.log("Post submitted successfully");
                 setPost({
                 title: "",
@@ -73,13 +52,12 @@ function CreatePostArea(props) {
             });
             setUploadStatus("");
             setIsOpen(false); // 关闭模态窗口
+
+        } else {
+            const data = await response.json();
+            console.log("error");
         }
-        else {
-                const data = await response.json();
-                console.log("error");
-        }
-              
-        };   
+    };   
 
     function toggleModal() {
         setIsOpen(!isOpen);

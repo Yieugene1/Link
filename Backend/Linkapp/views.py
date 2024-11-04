@@ -149,6 +149,14 @@ class PostView(APIView):
         post.delete()
         return Response({'message': 'Post deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
     
+
+class MyPost(generics.ListAPIView):
+    permission_classes=[IsAuthenticated]
+    serializer_class=PostSerializer
+    def get_queryset(self):
+        return Post.objects.filter(user=self.request.user)
+
+
 class LikePostView(APIView):
     permission_classes=[IsAuthenticated]
     def post(self,request,post_id,*org,**kwargs):
