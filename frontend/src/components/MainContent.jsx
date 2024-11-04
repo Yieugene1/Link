@@ -23,6 +23,7 @@ const MainContent = () => {
   return (
     <div className="p-4">
       <CreatePostArea onAdd={addPost} />
+      <div className="divider"></div>
       <div>
         {posts.map((postItem, index) => (
           <Posts

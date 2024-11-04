@@ -17,12 +17,12 @@ const Navbar = () => {
             Profile
           </Link>
         </div>
-        <div className="flex-none">
+      </div>
+      <div className="flex-none">
           <Link to="/welcome" className="btn btn-ghost font-bold">
             Log In / Sign In
           </Link>
         </div>
-      </div>
     </div>
   );
 };

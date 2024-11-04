@@ -6,7 +6,7 @@ import ContactList from './ContactList';
 import ChatWindow from './ChatWindow';
 
 const ContactCard = () => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [selectedFriend, setSelectedFriend] = useState(null);
   const [showChatWindow, setShowChatWindow] = useState(false); // 控制聊天窗口的显示
 
@@ -24,13 +24,15 @@ const ContactCard = () => {
   };
 
   return (
-    <div className="card bg-base-100 w-96 shadow-xl card-bordered">
-      <ContactHeader onToggle={toggleCard} />
+    <div className={`fixed bottom-4 right-4 w-80 bg-white shadow-lg rounded-t-lg overflow-hidden transition-all duration-300 ${
+      isExpanded ? 'h-[80vh] animate-slide-up' : 'h-12'
+    }`}>
+      <ContactHeader onToggle={toggleCard} isExpanded={isExpanded}/>
       {isExpanded && (
-        <>
+        <div className="p-4 space-y-4">
           <ContactSearch />
           <ContactList onSelectFriend={selectFriend} />
-        </>
+        </div>
       )}
       {showChatWindow && <ChatWindow friend={selectedFriend} onClose={closeChatWindow} />}
     </div>

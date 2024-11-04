@@ -1,47 +1,46 @@
 // ContactHeader.js
 import React from 'react';
 
-const ContactHeader = ({ onToggle }) => {
+const ContactHeader = ({ onToggle, isExpanded}) => {
   return (
-    <div class="static">
+    <div class="flex items-center justify-between p-2 rounded-t-lg shadow cursor-pointer hover:bg-gray-50" onClick={onToggle}>
+        <div className="flex items-center space-x-2">
+            <div className="avatar">
+                <div className="w-8 rounded-full">
+                    <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                </div>
+            </div> 
+            <span className="text-sm font-semibold">Username</span>
+        </div>
+ 
 
-        <div className="avatar static">
-            <div className="w-14 rounded-full">
-                <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-            </div>
-        </div> 
-
-        <span className="inline-block">Username</span>
-
-        <div class="inline-block right-0">
-            <div>
-                <label className="btn btn-circle swap swap-rotate">
+        <div onClick={(e) => e.stopPropagation()}> {/* 防止点击按钮时触发标题栏的切换 */}
+                <label className="btn btn-circle btn-xs swap swap-rotate">
                         {/* this hidden checkbox controls the state */}
-                        <input type="checkbox" onClick={onToggle}/>
+                        <input type="checkbox" checked={isExpanded} onChange={onToggle} />
 
                         {/* hamburger icon */}
                         <svg
-                            className="swap-off fill-current"
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="32"
-                            height="32"
-                            viewBox="0 0 512 512">
-                            <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+                             className="w-8 swap-on fill-current"
+                             xmlns="http://www.w3.org/2000/svg"
+                             width="16"
+                             height="16"
+                             viewBox="0 0 24 24">
+                             <path d="M12 16l-6-6h12z" />
                         </svg>
 
                         {/* close icon */}
                         <svg
-                            className="swap-on fill-current"
+                            className="w-8 swap-off fill-current"
                             xmlns="http://www.w3.org/2000/svg"
-                            width="32"
-                            height="32"
-                            viewBox="0 0 512 512">
-                            <polygon
-                            points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24">
+                            <path d="M12 8l6 6H6z" />
                         </svg>
                     </label>
                 </div>
-            </div>
+
     </div>
   );
 };

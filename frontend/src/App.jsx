@@ -17,7 +17,7 @@ function App() {
       <div>
         <Outlet />
       </div>
-      <AccessibleButton />
+
     </ThemeProvider>
   )
 }

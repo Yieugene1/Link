@@ -10,7 +10,7 @@ const ContactList = ({ onSelectFriend }) => {
   ];
 
   return (
-    <div className="contact-list">
+    <div className="contact-list h-96">
       {friends.map((friend) => (
         <FriendItem
           key={friend.id}

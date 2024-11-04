@@ -14,23 +14,23 @@ const UserInfoCard = () => {
   
     return (
 
-      <div className=" w-96 shadow-xl p-4 flex space-x-4">
+      <div className=" w-96 shadow-md p-3 flex bg-white rounded-lg">
 
         <div className="flex items-center w-1/3">
           <div className="avatar ">
-            <div className="w-24 rounded-full flex-shrink-0 mr-4">
+            <div className="w-20 rounded-full flex-shrink-0 mr-4">
               <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
             </div>
           </div>
         </div>
 
-        <div className='flex flex-col'>
+        <div className='flex flex-col justify-between ml-4'>
           <div className="flex items-center space-x-2">
-            <h2 className="card-title">{user.name}</h2>
+            <h2 className="text-lg font-semibold">{user.name}</h2>
             <button className="text-blue-500 hover:underline text-sm">Edit</button>
           </div>
 
-          <div className="flex space-x-4 mt-1 text-gray-700">
+          <div className="flex space-x-4 mt-1 text-gray-700 text-sm">
             <p>Posts: <span className="font-semibold">{user.posts}</span></p>
             <p>Fans: <span className="font-semibold">{user.fans}</span></p>
             <p>Following: <span className="font-semibold">{user.following}</span></p>
