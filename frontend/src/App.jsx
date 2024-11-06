@@ -1,23 +1,21 @@
 import { ThemeProvider } from '@mui/material/styles';
 import { normalTheme, accessibleTheme } from './theme.js';
 import { useSelector } from 'react-redux'
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import Navbar from './components/Navbar.jsx';
 import AccessibleButton from './components/AccessibleButton';
 import './App.css';
 
 function App() {
   const theme = useSelector((state) => state.theme.value)
-  //const user = useSelector((state) => state.user.value)
-  let user = true
-  
+  const user = useSelector((state) => state.user.value)
+
   return (
     <ThemeProvider theme={theme ? accessibleTheme : normalTheme}>
-      {user? <Navbar /> : null}
+      {user ? <Navbar /> : null}
       <div>
-        <Outlet />
+        {user ? <Outlet /> : <Navigate to='/welcome' replace={true} />}
       </div>
-
     </ThemeProvider>
   )
 }

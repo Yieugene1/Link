@@ -3,15 +3,15 @@ import { TextField } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux'
 import { signIn } from '../store/userSlice.js'
-import { login } from '../lib/fetch';
+import { login, refresh } from '../lib/fetch';
 
 const Login = ({ handleClick }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const dispatch = useDispatch()
-  const [success, setSuccess] = useState(''); 
-  
+  const [success, setSuccess] = useState('');
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -20,10 +20,11 @@ const Login = ({ handleClick }) => {
     setSuccess('');
     const response = await login(username, password);
     if (response.ok) {
-      dispatch(signIn())
-      setSuccess('Logged in successfully!'); 
+      const timer = refresh()
+      dispatch(signIn(timer))
+      setSuccess('Logged in successfully!');
       setTimeout(() => {
-        navigate('/'); 
+        navigate('/');
       }, 1500);
     } else {
       const data = await response.json();
