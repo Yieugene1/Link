@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
-from .models import Profile, Post
+from .models import Profile, Post,FollowersCount
 from .serializers import UserSerializer, ProfileSerializer, PostSerializer,LikePostSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -10,7 +10,30 @@ from .serializers import CustomTokenObtainPairSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import JsonResponse
+from rest_framework_simplejwt.tokens import RefreshToken
 
+
+
+class tokenrefresh(APIView):
+    permission_classes=[IsAuthenticated]
+    def post(self,request):
+        refresh_token = request.COOKIES.get('refresh')
+
+        token=RefreshToken(refresh_token)
+        new_accesstoken = str(token)
+        Response(
+            {
+                "message":"update token"
+            },status=status.HTTP_200_OK
+        )
+        Response.set_cookie(
+            key="access",
+            value=new_accesstoken,
+            httponly=True,        
+            secure=True,          
+            samesite='None'  
+        )
+        return Response
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
@@ -40,12 +63,6 @@ class UserListView(generics.ListAPIView):
     permission_classes = (AllowAny,)
 
 
-class ProfileListView(generics.ListAPIView):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    permission_classes = (AllowAny,)
-
-
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
     def post(self,request,*args,**kwargs):
@@ -53,7 +70,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         serializer.is_valid(raise_exception=True)
         data =serializer.validated_data
         access_token=data['access']
-        refresh_token=data['access']
+        refresh_token=data['refresh']
         response = JsonResponse({
             "message": "Login successful",
         })
@@ -63,19 +80,28 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             value=access_token,
             httponly=True,        
             secure=True,          
-            samesite='None'      
+            samesite='None',   
+            path='/',
+            max_age=36000   
         )
         response.set_cookie(
             key="refresh",
             value=refresh_token,
             httponly=True,
             secure=True,
-            samesite='None'
+            samesite='None',
+            path='/',
+            max_age=36000
         )
 
         return response
 
+#profile代码
 
+class ProfileListView(generics.ListAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = (AllowAny,)
 
 class ProfileUpdateView(APIView):
     permission_classes = [IsAuthenticated]
@@ -95,6 +121,10 @@ class ProfileUpdateView(APIView):
                     'data': serializer.data
                 }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#帖子代码
+
 
 class Postlist(generics.ListAPIView):
     serializer_class = PostSerializer
@@ -183,3 +213,54 @@ class LogoutView(APIView):
         response.delete_cookie('access')
         response.delete_cookie('refresh')
         return response
+
+
+#关注代码
+
+class FollowUserView(APIView):
+    def post(self, request, username):
+
+        current_user = request.user.id
+        target_user = get_object_or_404(User, username=username)
+        
+        if FollowersCount.objects.filter(follower=current_user, following=target_user).exists():
+            return Response({"message": "You are already following this user."}, status=status.HTTP_400_BAD_REQUEST)
+
+        FollowersCount.objects.create(follower=current_user, following=target_user)
+        return Response({"message": "User followed successfully."}, status=status.HTTP_201_CREATED)
+
+class UnFollowUserView(APIView):
+    def delete(self,request,useranme):
+        current_user = request.user.id
+        target_user =get_object_or_404(User,useranme=useranme)
+        Follow_relationship = FollowersCount.objects.filter(follower=current_user,following=target_user)
+        if not Follow_relationship.exists():
+            return Response(
+                {
+                    "message":"You are not follow this user",
+                },status=status.HTTP_204_NO_CONTENT
+            )
+        Follow_relationship.delete()
+        return Response(
+            {
+                "message":"User unfollowed successfully"
+            },status=status.HTTP_200_OK
+        )
+    
+        
+class FollowingListView(APIView):
+    def get(self, request, username):
+        user = get_object_or_404(User, username=username)
+        following = user.following_set.all()  
+        following_data = [{"username": follow.following.username} for follow in following]
+        return Response(following_data, status=status.HTTP_200_OK)
+
+
+class Loginstatus(APIView):
+    permission_classes=[IsAuthenticated]
+    def post(self, request):
+        return Response(
+                {
+                    "message": "logined",
+                },status=status.HTTP_200_OK
+        )

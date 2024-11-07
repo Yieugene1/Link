@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ./Backend  
+      dockerfile: dockerfile  
+    container_name: backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_NAME=Linkapp
+      - DB_USER=postgres
+      - DB_PASSWORD=123
+      - DB_HOST=localhost
+      - DB_PORT=5432
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend  
+      dockerfile: Dockerfile  
+    container_name: frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:13
+    container_name: db
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" 
+
+volumes:
+  postgres_data:
