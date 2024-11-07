@@ -20,8 +20,7 @@ const Login = ({ handleClick }) => {
     setSuccess('');
     const response = await login(username, password);
     if (response.ok) {
-      const timer = refresh()
-      dispatch(signIn(timer))
+      dispatch(signIn())
       setSuccess('Logged in successfully!');
       setTimeout(() => {
         navigate('/');

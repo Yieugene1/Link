@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { refresh } from '../lib/fetch';
 
 const initialState = {
   value: false,
@@ -9,12 +10,15 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    signIn: (state, action) => {
+    signIn: state => {
+      console.log("sign in")
       state.value = true
-      state.refresh = action.payload
+      state.refresh = refresh()
     },
-    signOut: (state) => {
+    signOut: state => {
+      console.log("sign out")
       state.value = false
+      clearInterval(state.refresh)
       state.refresh = null
     },
   }

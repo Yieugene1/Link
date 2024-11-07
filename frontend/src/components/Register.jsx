@@ -22,8 +22,7 @@ const Register = ({ handleClick }) => {
 
     const response = await register(name, email, password);
     if (response.ok) {
-      const timer = refresh()
-      dispatch(signIn(timer))
+      dispatch(signIn())
       setSuccess('Signed up successfully!');
       setTimeout(() => {
         handleClick();

@@ -20,12 +20,17 @@ export const register = (name, email, password) =>
     }),
   })
 
+export const LoginStatus = () =>
+  fetch(`${import.meta.env.VITE_BACKEND}/api/LoginStatus/`,
+    { method: 'POST' }
+  )
+
 export const refresh = () =>
   setTimeout(() =>
-    fetch(`${import.meta.env.VITE_BACKEND}/api/register/`,
+    fetch(`${import.meta.env.VITE_BACKEND}/token/refresh/`,
       { method: 'POST' }
     ),
-    1800000
+    50000
   )
 
 export const CreatePost = (title, content, post_image, avatar) =>

@@ -7,10 +7,6 @@ import Friends from './route/Friends';
 
 export const router = createBrowserRouter([
   {
-    path: "/welcome",
-    element: <Welcome />,
-  },
-  {
     path: "/",
     element: <App />,
     children: [

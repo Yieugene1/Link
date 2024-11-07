@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import { signOut } from '../store/userSlice.js'
 
 
 const Navbar = () => {
+  const dispatch = useDispatch()
   return (
     <div className="navbar bg-primary text-white sticky top-0 w-full shadow-lg z-50">
       <div className="flex-1">
@@ -19,10 +22,10 @@ const Navbar = () => {
         </div>
       </div>
       <div className="flex-none">
-          <Link to="/welcome" className="btn btn-ghost font-bold">
-            Log In / Sign In
-          </Link>
-        </div>
+        <a className="btn btn-ghost font-bold" onClick={() => dispatch(signOut())}>
+          Log Out
+        </a>
+      </div>
     </div>
   );
 };
