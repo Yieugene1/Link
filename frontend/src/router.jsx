@@ -3,6 +3,7 @@ import App from "./App";
 import Home from './route/Home';
 import Welcome from './route/Welcome';
 import Profile from './route/Profile';
+import Friends from './route/Friends';
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
+      },
+      {
+        path: "friends",
+        element: <Friends />,
       },
       
     ],
