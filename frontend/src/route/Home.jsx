@@ -4,7 +4,6 @@ import MainContent from '../components/MainContent';
 import ContactCard from '../components/ContactCard';
 
 function Home() {
-
   return (
     <div className="bg-stone-100 min-h-screen p-4">
       <div className='flex space-x-4'>

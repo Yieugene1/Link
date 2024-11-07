@@ -13,9 +13,7 @@ function App() {
   return (
     <ThemeProvider theme={theme ? accessibleTheme : normalTheme}>
       {user ? <Navbar /> : null}
-      <div>
-        {user ? <Outlet /> : <Navigate to='/welcome' replace={true} />}
-      </div>
+      {user ? <Outlet /> : <Navigate to='/welcome' replace={true} />}
     </ThemeProvider>
   )
 }
